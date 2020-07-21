@@ -1,0 +1,114 @@
+﻿@model IEnumerable<mvc3.Areas.AdminPanel.Models.favorim>
+@{
+    ViewBag.Title = "MyFavoriute";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<div class="wishlist-right-area table-responsive">
+    <table class="wish-list-table">
+        <thead>
+            <tr>
+                <th class="t-product-name">Resim</th>
+                <th class="product-details-comment">Kitap Adı & Detayı</th>
+                <th class="product-price-cart">Sepete Ekle</th>
+                <th class="w-product-remove">Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="@item.id">
+                    <td class="product-image">
+                        <a href="@Url.Action("ProductDetails","Shop",new {productId=item.productId })">
+                            <img src="@Url.Action("Thumbnail","Shop",new {width=90,height=110,id=item.urun.urunNo,_resimNo=item.urun.resim.FirstOrDefault().resimNo })" alt="">
+                        </a>
+                    </td>
+                    <td class="product-details">
+                        <h4>@item.urun.urunAdi</h4>
+                        <p> @item.urun.aciklama</p>
+                        <textarea id="comment" name="comment" placeholder="Please Enter Your Comment"> </textarea>
+                        <input type="hidden" id="user" value="@User.Identity.Name" /> 
+                        <input type="submit" id="addComment" product="@item.productId" value="Yorumu Kaydet" />
+
+                    </td>
+                    <td class="product-cart">
+                        <div class="product-cart-details">
+                            <span>₺ @item.urun.fiyat</span>
+                            
+                            <input type="number" id="quantity" value="1">
+                             
+                            <input type="submit"  id="addBasket" product="@item.productId" value="Sepete ekle">
+                        </div>
+                       
+                    </td>
+                    <td class="product-remove">
+                        <a href="javascript:void(0);" favoriNo="@item.id" id="deleteFavoriute">
+                            <i class="flaticon-delete"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+</div>
+<div class="wishlist-bottom-link">
+    <a class="wishlist-single-link" href="@Url.Action("Index","Shop")">
+        <i class="fa fa-angle-double-left"></i>
+        Anasayfa
+    </a>
+    <div class="shopingcart-bottom-area wishlist-bottom-area pull-right">
+        <a href="#" class="right-shoping-cart">SHARE WISHLIST</a>
+        <a href="#" class="right-shoping-cart">ADD ALL TO CART</a>
+        <a href="#" class="right-shoping-cart">UPDATE WISHLIST</a>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#addComment").click(function () {             
+             var userName= $("#user").val();
+             var comment = $("#comment").val();
+             var productId = $(this).attr("product");
+             $.ajax({
+                  url: '@Url.Action("yorumKaydet","Shop")',
+                  type: "POST",
+                  data: { _urunNo: productId, _yorumcu: userName, _yorum: comment },
+                  success: function (response) {
+                      alert(response);
+                     
+                }
+            });
+         });
+
+         $(document).on("click", "#addBasket", function () {
+
+             var data = $(this).attr("product");
+             var quantity = $("#quantity").val();
+            $.ajax({
+                url: '@Url.Action("AddCard","Shop")',
+                type: "POST",
+                data: { productId: data,quantity:quantity },
+                success: function (response) {
+                    //alert(JSON.stringify(response));
+                    location.reload();
+                  
+                }
+            });
+        });
+
+        $(document).on("click", "#deleteFavoriute", function () {
+             var  data = $(this).attr("favoriNo");
+            $.ajax({
+                url: '@Url.Action("DeleteFavourite", "Account")',
+                type: "POST",
+                data: { id: data },
+                success: function (response) {
+                    $('tr#' + data).fadeOut(1000);
+                }
+            });
+        });
+    });
+</script>

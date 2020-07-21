@@ -1,0 +1,272 @@
+﻿@using mvc3.Models.ViewModel
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Kitap Deposu-Online Satış</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+    <!-- Place favicon.ico in the root directory -->
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Poppins:400,700,600,500,300' rel='stylesheet' type='text/css'>
+
+    <!-- all css here -->
+    <!-- bootstrap v3.3.6 css -->
+    <link rel="stylesheet" href="~/Content/Site/css/bootstrap.min.css">
+    <!-- animate css -->
+    <link rel="stylesheet" href="~/Content/Site/css/animate.css">
+    <!-- jquery-ui.min css -->
+    <link rel="stylesheet" href="~/Content/Site/css/jquery-ui.min.css">
+    <!-- meanmenu css -->
+    <link rel="stylesheet" href="~/Content/Site/css/meanmenu.min.css">
+    <!-- Font-Awesome css -->
+    <link rel="stylesheet" href="~/Content/Site/css/font-awesome.min.css">
+    <!-- pe-icon-7-stroke css -->
+    <link rel="stylesheet" href="~/Content/Site/" css/pe-icon-7-stroke.css">
+    <!-- Flaticon css -->
+    <link rel="stylesheet" href="~/Content/Site/css/flaticon.css">
+    <!-- venobox css -->
+    <link rel="stylesheet" href="~/Content/Site/venobox/venobox.css" type="text/css" media="screen" />
+    <!-- nivo slider css -->
+    <link rel="stylesheet" href="~/Content/Site/lib/css/nivo-slider.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/Site/lib/css/preview.css" type="text/css" media="screen" />
+    <!-- owl.carousel css -->
+    <link rel="stylesheet" href="~/Content/Site/css/owl.carousel.css">
+    <!-- style css -->
+    <link rel="stylesheet" href="~/Content/Site/style.css">
+    <!-- responsive css -->
+    <link rel="stylesheet" href="~/Content/Site/css/responsive.css">
+
+    <link rel="stylesheet" href="~/Content/Site/css/venobox.css">
+    <!-- modernizr css -->
+    <script src="~/Content/Site/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+    <div class="header-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 col-sm-6 col-xs-6">
+                    <div class="header-logo">
+                        <a href="index.html">
+                            <img src="img/logo.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-1 col-sm-6 visible-sm  col-xs-6">
+                    <div class="header-right">
+                        <ul>
+                            <li>
+                                <a href="~/Account"><i class="flaticon-people"></i></a>
+                            </li>
+                            <li class="shoping-cart">
+                                @if (Session["Card"] == null)
+                                {
+                                    <a href="@Url.Action("Basket","Shop")">
+                                        <i class="flaticon-shop"></i>
+                                        <span></span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    List<BasketItem> sepet = (List<BasketItem>)Session["Card"];
+
+                                    <a href="@Url.Action("Basket","Shop")">
+                                        <i class="flaticon-shop"></i>
+                                        <span>@sepet.Sum(x => x.quantity)</span>
+                                    </a>
+                                    <div class="add-to-cart-product">
+                                        @foreach (var item in sepet)
+                                        {
+                                            <div id="@item.Id" class="cart-product">
+                                                <div class="cart-product-image">
+                                                    <a href="@Url.Action("productDetail","Shop", new { productId = item.product.urunNo })">
+                                                        <img src="@Url.Action("Thumbnail","Shop",new { width=104,height=104,Id=item.product.urunNo,_resimNo=item.product.resim.FirstOrDefault().resimNo})" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="cart-product-info">
+                                                    <p>
+                                                        <span>@item.quantity</span>
+                                                        x
+                                                        <a href="@Url.Action("productDetail","Shop", new { productId = item.product.urunNo })">@item.product.urunAdi</a>
+                                                    </p>
+                                                    <a href="@Url.Action("productDetail","Shop", new { productId = item.product.urunNo })">@item.product.yazar</a>
+                                                    <span class="cart-price">₺ @item.product.fiyat</span>
+                                                </div>
+                                                <div class="cart-product-remove">
+                                                    <i id="deleteBasket" div-id="@item.Id" productId="@item.product.urunNo" class="fa fa-times"></i>
+                                                </div>
+                                            </div>
+                                        }
+
+
+                                        <div class="total-cart-price">
+                                            <div class="cart-product-line fast-line">
+                                                <span>Teslimat</span>
+                                                <span class="free-shiping">₺ 5</span>
+                                            </div>
+                                            <div class="cart-product-line">
+                                                <span>Toplam</span>
+                                                <span class="total">₺ @(sepet.Sum(x => x.product.fiyat * x.quantity) + 5m)</span>
+                                            </div>
+                                        </div>
+                                        <div class="cart-checkout">
+                                            <a href="@Url.Action("Checkout","Shop")">
+                                                Öde
+                                                <i class="fa fa-chevron-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-9 col-sm-12 hidden-xs">
+                    <div class="mainmenu text-center">
+                        <nav>
+                            <ul id="nav">
+                                <li><a href="~/Shop">ANASAYFA</a></li>
+                                <li><a href="~/Shop">KİTAPLAR</a></li>
+                                <li><a href="~/Contact">İLETİŞİM</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-md-1 hidden-sm">
+                    <div class="header-right">
+                        <ul>
+                            <li>
+                                @if (User.Identity.IsAuthenticated)
+                                {<a href="~/Account"><i style="background-color:#00ff21" class="flaticon-people"></i></a>}
+                                else
+                                {<a href="~/Account"><i class="flaticon-people"></i></a>}
+                            </li>
+                            <li class="shoping-cart">
+                                @if (Session["Card"] == null)
+                                {
+                                    <a href="@Url.Action("Basket","Shop")">
+                                        <i class="flaticon-shop"></i>
+                                        <span></span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    List<BasketItem> sepet = (List<BasketItem>)Session["Card"];
+
+                                    <a href="@Url.Action("Basket","Shop")">
+                                        <i class="flaticon-shop"></i>
+                                        <span>@sepet.Sum(x => x.quantity)</span>
+                                    </a>
+                                    <div class="add-to-cart-product">
+                                        @foreach (var item in sepet)
+                                        {
+                                            <div id="@item.Id" class="cart-product">
+                                                <div class="cart-product-image">
+                                                    <a href="@Url.Action("productDetail","Shop", new { productId = item.product.urunNo })">
+                                                        <img src="@Url.Action("Thumbnail","Shop",new { width=104,height=104,Id=item.product.urunNo,_resimNo=item.product.resim.FirstOrDefault().resimNo})" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="cart-product-info">
+                                                    <p>
+                                                        <span>@item.quantity</span>
+                                                        x
+                                                        <a href="@Url.Action("productDetail","Shop", new { productId = item.product.urunNo })">@item.product.urunAdi</a>
+                                                    </p>
+                                                    <a href="@Url.Action("productDetail","Shop", new { productId = item.product.urunNo })">@item.product.yazar</a>
+                                                    <span class="cart-price">₺ @item.product.fiyat</span>
+                                                </div>
+                                                <div class="cart-product-remove">
+                                                    <i id="deleteBasket" div-id="@item.Id" productId="@item.product.urunNo" class="fa fa-times"></i>
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (sepet.Count>0)
+                                        {
+                                            <div class="total-cart-price">
+                                                <div class="cart-product-line fast-line">
+                                                    <span>Teslimat</span>
+                                                    <span class="free-shiping">₺ 5</span>
+                                                </div>
+                                                <div class="cart-product-line">
+                                                    <span>Toplam</span>
+                                                    <span class="total">₺ @(sepet.Sum(x => x.product.fiyat * x.quantity) + 5m)</span>
+                                                </div>
+                                            </div>
+                                            <div class="cart-checkout">
+                                                <a href="@Url.Action("Checkout","Shop")">
+                                                    Öde
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="cart-checkout">
+                                                <a href="#">
+                                                   Sepetiniz Boş
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </a>
+                                            </div>
+                                        }
+
+
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Header Area End-->
+    <!-- Mobile Menu Start -->
+    <div class="mobile-menu-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="mobile-menu">
+                        <nav id="dropdown">
+                            <ul>
+                                <li><a href="~/Shop">ANASAYFA</a></li>
+                                <li><a href="~/Shop">KİTAPLAR</a></li>
+                                <li><a href="~/Contact">İLETİŞİM</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile Menu End -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $(document).on("click", "#deleteBasket", function () {
+             
+                var divId = $(this).attr("div-id"); 
+                var _productId = $(this).attr("productId");
+                $.ajax({
+                    url: "@Url.Action("deleteItemInCard", "Shop")",
+                    type: "POST",
+                    data: { productId: _productId },
+                    success: function (data) {
+                        $("div#" + divId).remove();
+                        location.reload();
+                    }
+                });
+             
+
+            });
+    
+    });
+    </script>

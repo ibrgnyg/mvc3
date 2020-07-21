@@ -1,0 +1,119 @@
+﻿@using mvc3.Models.ViewModel
+@Html.Partial("Header");
+@*<div class="slider-area">
+    <div class="bend niceties preview-1">
+        <div id="ensign-nivoslider" class="slides">
+            <img src="~/Content/Site/img/slider/1.jpg" alt="" title="#slider-direction-1" />
+            <img src="~/Content/Site/img/slider/2.jpg" alt="" title="#slider-direction-2" />
+        </div>
+        <!-- direction 1 -->
+       @*<div id="slider-direction-1" class="text-center slider-direction">
+            <!-- layer 1 -->
+            <div class="layer-1">
+                <h2 class="title-1">LET’S WRITE IMAGINE</h2>
+            </div>
+            <!-- layer 2 -->
+            <div class="layer-2">
+                <p class="title-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <!-- layer 3 -->
+            <div class="layer-3">
+                <a href="#" class="title-3">SEE MORE</a>
+            </div>
+            <!-- layer 4 -->
+            <div class="layer-4">
+                <form action="#" class="title-4">
+                    <input type="text" placeholder="Enter your book title here">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+        <!-- direction 2 -->
+        <div id="slider-direction-2" class="slider-direction">
+            <!-- layer 1 -->
+            <div class="layer-1">
+                <h2 class="title-1">LET’S WRITE IMAGINE</h2>
+            </div>
+            <!-- layer 2 -->
+            <div class="layer-2">
+                <p class="title-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <!-- layer 3 -->
+            <div class="layer-3">
+                <a href="#" class="title-3">SEE MORE</a>
+            </div>
+            <!-- layer 4 -->
+            <div class="layer-4">
+                <form action="~/Shop/" class="title-4">
+                    <input type="text" name="search" id="search" placeholder="Arayacağınız bir kitap adı, yazarıi yayın evi, türü vb...">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="our-team-area">
+     @*en çok satanlar*@
+    @{ Html.RenderAction("BestSeller"); }
+   
+</div>
+
+<!-- Shop Area Start -->
+<div class="shopping-area section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-3 col-xs-12">
+                <div class="shop-widget">
+                    <div class="shop-widget-top">
+                        <aside class="widget widget-categories">
+                            <h2 class="sidebar-title text-center">KATEGORİ</h2>
+                            @{ Html.RenderAction("PartialCategory"); }
+
+                        </aside>
+                        <aside class="widget shop-filter">
+                            <h2 class="sidebar-title text-center">FİYAT ARALIĞI</h2>
+                            @{ Html.RenderAction("PartialPrice"); }
+
+                        </aside>
+                    </div>
+                    <div class="shop-widget-bottom">
+                        @*<aside class="widget widget-tag">
+                            <h2 class="sidebar-title">POPULAR TAG</h2>
+                            <ul class="tag-list">
+                                <li>
+                                    <a href="#">e-book</a>
+                                </li>
+                                <li>
+                                    <a href="#">writer</a>
+                                </li>
+                                <li>
+                                    <a href="#">book’s</a>
+                                </li>
+                                <li>
+                                    <a href="#">eassy</a>
+                                </li>
+                                <li>
+                                    <a href="#">nice</a>
+                                </li>
+                                <li>
+                                    <a href="#">author</a>
+                                </li>
+                            </ul>
+                        </aside>*@
+                        <aside class="widget widget-seller">
+                            <h2 class="sidebar-title">Yeni Gelenler</h2>
+                            @{ Html.RenderAction("NewProducts"); }
+
+                        </aside>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Shop Area End -->
+@Html.Partial("Footer");
